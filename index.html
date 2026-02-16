@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disperse PC - Pentagon Chain</title>
+    <link rel="icon" href="https://pentagon.games/assets/images/brand-kit/pentagon-chain-token/png/pentagon-chain-token-fcp.png" type="image/png">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .logo-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 0.5rem;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: #00d4aa;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .wallet-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .wallet-info {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .wallet-address {
+            font-family: monospace;
+            color: #00d4aa;
+        }
+        .balance {
+            color: #fff;
+            font-weight: bold;
+        }
+        button {
+            background: #00d4aa;
+            color: #000;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        button:hover { background: #00f5c4; }
+        button:disabled {
+            background: #444;
+            color: #888;
+            cursor: not-allowed;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            color: #fff;
+            font-family: monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #00d4aa;
+        }
+        textarea::placeholder { color: #555; }
+        .summary {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0,212,170,0.1);
+            border-radius: 8px;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        .summary-row:last-child { margin-bottom: 0; }
+        .summary-label { color: #aaa; }
+        .summary-value { font-weight: bold; }
+        .error {
+            background: rgba(255,0,0,0.2);
+            border: 1px solid rgba(255,0,0,0.3);
+            color: #ff6b6b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        .success {
+            background: rgba(0,212,170,0.2);
+            border: 1px solid rgba(0,212,170,0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        .success a {
+            color: #00d4aa;
+            word-break: break-all;
+        }
+        .actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+        }
+        .actions button { flex: 1; }
+        .format-hint {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        .status {
+            text-align: center;
+            padding: 1rem;
+            color: #aaa;
+        }
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #00d4aa;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #555;
+            font-size: 0.8rem;
+        }
+        .footer a { color: #00d4aa; text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .social-links a {
+            color: #888;
+            transition: color 0.2s;
+        }
+        .social-links a:hover { color: #00d4aa; }
+        .social-links svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+        .contract-info {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: #444;
+        }
+        .contract-info a { color: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-header">
+            <img src="https://pentagon.games/assets/images/brand-kit/pentagon-chain-token/png/pentagon-chain-token-fcp.png" alt="Pentagon Chain" class="logo">
+            <h1>Disperse PC</h1>
+            <p class="subtitle">Batch send PC tokens on Pentagon Chain</p>
+        </div>
+
+        <div class="card wallet-section">
+            <div class="wallet-info">
+                <div id="wallet-status">Not connected</div>
+                <div id="wallet-balance"></div>
+            </div>
+            <button id="connect-btn" onclick="connectWallet()">Connect Wallet</button>
+        </div>
+
+        <div class="card">
+            <label>Recipients and Amounts</label>
+            <textarea id="input" placeholder="0x1234...abcd 10.5
+0x5678...efgh 25
+0xabcd...1234 7.25
+
+One address per line, whitespace separated"></textarea>
+            <div class="format-hint">Format: address[space or tab]amount — one per line</div>
+
+            <div id="summary" class="summary" style="display:none;">
+                <div class="summary-row">
+                    <span class="summary-label">Recipients</span>
+                    <span class="summary-value" id="recipient-count">0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Total Amount</span>
+                    <span class="summary-value" id="total-amount">0 PC</span>
+                </div>
+            </div>
+
+            <div id="error" class="error" style="display:none;"></div>
+            <div id="success" class="success" style="display:none;"></div>
+            <div id="status" class="status" style="display:none;"></div>
+
+            <div class="actions">
+                <button id="disperse-btn" onclick="disperse()" disabled>Disperse</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="social-links">
+                <a href="https://x.com/PentagonGamesXP" target="_blank" title="Twitter">
+                    <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="https://discord.gg/pentagongamesxp" target="_blank" title="Discord">
+                    <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+                </a>
+                <a href="https://t.me/pentagongames" target="_blank" title="Telegram">
+                    <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                </a>
+                <a href="https://github.com/blockchainsuperheroes/disperse-pc" target="_blank" title="GitHub">
+                    <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                </a>
+            </div>
+            <a href="https://pentagon.games" target="_blank">pentagon.games</a>
+            <div class="contract-info">
+                Contract: <a href="https://explorer.pentagon.games/address/0x210a72A04fAF219e3c0EEf34c1A8f85E87633de5" target="_blank">0x210a...3de5</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script>
+        const DISPERSE_ADDRESS = "0x210a72A04fAF219e3c0EEf34c1A8f85E87633de5";
+        const CHAIN_ID = 3344;
+        const RPC_URL = "https://rpc.pentagon.games";
+        const DISPERSE_ABI = [
+            "function dispersePCExactDecimal(address[] recipients, uint256[] values) payable"
+        ];
+
+        let provider, signer, userAddress;
+
+        async function connectWallet() {
+            if (!window.ethereum) {
+                alert("Please install MetaMask or another Web3 wallet");
+                return;
+            }
+
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                userAddress = accounts[0];
+
+                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+                if (parseInt(chainId, 16) !== CHAIN_ID) {
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: '0x' + CHAIN_ID.toString(16) }]
+                        });
+                    } catch (switchError) {
+                        if (switchError.code === 4902) {
+                            await window.ethereum.request({
+                                method: 'wallet_addEthereumChain',
+                                params: [{
+                                    chainId: '0x' + CHAIN_ID.toString(16),
+                                    chainName: 'Pentagon Chain',
+                                    nativeCurrency: { name: 'PC', symbol: 'PC', decimals: 18 },
+                                    rpcUrls: [RPC_URL],
+                                    blockExplorerUrls: ['https://explorer.pentagon.games']
+                                }]
+                            });
+                        } else {
+                            throw switchError;
+                        }
+                    }
+                }
+
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+
+                document.getElementById('wallet-status').innerHTML = 
+                    `Connected: <span class="wallet-address">${userAddress.slice(0,6)}...${userAddress.slice(-4)}</span>`;
+                document.getElementById('connect-btn').textContent = 'Connected';
+                document.getElementById('connect-btn').disabled = true;
+                document.getElementById('disperse-btn').disabled = false;
+
+                updateBalance();
+
+                window.ethereum.on('accountsChanged', () => location.reload());
+                window.ethereum.on('chainChanged', () => location.reload());
+
+            } catch (err) {
+                console.error(err);
+                alert("Failed to connect: " + err.message);
+            }
+        }
+
+        async function updateBalance() {
+            if (!provider || !userAddress) return;
+            const balance = await provider.getBalance(userAddress);
+            const formatted = parseFloat(ethers.utils.formatEther(balance)).toFixed(4);
+            document.getElementById('wallet-balance').innerHTML = 
+                `Balance: <span class="balance">${formatted} PC</span>`;
+        }
+
+        function parseInput() {
+            const input = document.getElementById('input').value.trim();
+            if (!input) return { recipients: [], values: [], total: ethers.BigNumber.from(0) };
+
+            const lines = input.split('\n').filter(l => l.trim());
+            const recipients = [];
+            const values = [];
+            let total = ethers.BigNumber.from(0);
+            const errors = [];
+
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                const parts = line.split(/\s+/);
+                
+                if (parts.length < 2) {
+                    errors.push(`Line ${i+1}: Invalid format`);
+                    continue;
+                }
+
+                const address = parts[0];
+                const amount = parts[1];
+
+                if (!ethers.utils.isAddress(address)) {
+                    errors.push(`Line ${i+1}: Invalid address`);
+                    continue;
+                }
+
+                try {
+                    const value = ethers.utils.parseEther(amount);
+                    recipients.push(address);
+                    values.push(value);
+                    total = total.add(value);
+                } catch (e) {
+                    errors.push(`Line ${i+1}: Invalid amount "${amount}"`);
+                }
+            }
+
+            return { recipients, values, total, errors };
+        }
+
+        document.getElementById('input').addEventListener('input', () => {
+            const { recipients, values, total, errors } = parseInput();
+            
+            const summaryEl = document.getElementById('summary');
+            const errorEl = document.getElementById('error');
+            
+            if (recipients.length > 0) {
+                summaryEl.style.display = 'block';
+                document.getElementById('recipient-count').textContent = recipients.length;
+                document.getElementById('total-amount').textContent = 
+                    parseFloat(ethers.utils.formatEther(total)).toFixed(6) + ' PC';
+            } else {
+                summaryEl.style.display = 'none';
+            }
+
+            if (errors && errors.length > 0) {
+                errorEl.style.display = 'block';
+                errorEl.innerHTML = errors.join('<br>');
+            } else {
+                errorEl.style.display = 'none';
+            }
+        });
+
+        async function disperse() {
+            if (!signer) {
+                alert("Please connect wallet first");
+                return;
+            }
+
+            const { recipients, values, total, errors } = parseInput();
+
+            if (errors && errors.length > 0) {
+                alert("Please fix errors before dispersing");
+                return;
+            }
+
+            if (recipients.length === 0) {
+                alert("No valid recipients");
+                return;
+            }
+
+            const statusEl = document.getElementById('status');
+            const successEl = document.getElementById('success');
+            const errorEl = document.getElementById('error');
+            const disperseBtn = document.getElementById('disperse-btn');
+
+            try {
+                disperseBtn.disabled = true;
+                statusEl.style.display = 'block';
+                successEl.style.display = 'none';
+                errorEl.style.display = 'none';
+
+                statusEl.innerHTML = '<span class="spinner"></span> Preparing transaction...';
+
+                const contract = new ethers.Contract(DISPERSE_ADDRESS, DISPERSE_ABI, signer);
+
+                statusEl.innerHTML = '<span class="spinner"></span> Waiting for wallet confirmation...';
+
+                const tx = await contract.dispersePCExactDecimal(recipients, values, { value: total });
+
+                statusEl.innerHTML = '<span class="spinner"></span> Transaction submitted, waiting for confirmation...';
+
+                const receipt = await tx.wait();
+
+                statusEl.style.display = 'none';
+                successEl.style.display = 'block';
+                successEl.innerHTML = `
+                    ✅ Dispersed ${ethers.utils.formatEther(total)} PC to ${recipients.length} recipients!<br>
+                    <a href="https://explorer.pentagon.games/tx/${tx.hash}" target="_blank">${tx.hash}</a>
+                `;
+
+                document.getElementById('input').value = '';
+                document.getElementById('summary').style.display = 'none';
+                updateBalance();
+
+            } catch (err) {
+                console.error(err);
+                statusEl.style.display = 'none';
+                errorEl.style.display = 'block';
+                errorEl.textContent = err.message || "Transaction failed";
+            } finally {
+                disperseBtn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
