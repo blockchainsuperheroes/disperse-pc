@@ -357,11 +357,23 @@ One address per line, whitespace separated"></textarea>
                 }
 
                 const address = parts[0];
-                const amount = parts[1];
+                let amount = parts[1];
 
                 if (!ethers.utils.isAddress(address)) {
                     errors.push(`Line ${i+1}: Invalid address`);
                     continue;
+                }
+
+                // Smart decimal detection: EU (1.234,56) vs US (1,234.56)
+                // Rule: last separator is the decimal point
+                const lastComma = amount.lastIndexOf(',');
+                const lastDot = amount.lastIndexOf('.');
+                if (lastComma > lastDot) {
+                    // EU format: 1.234,56 -> 1234.56
+                    amount = amount.replace(/\./g, '').replace(',', '.');
+                } else if (lastDot > lastComma) {
+                    // US format: 1,234.56 -> 1234.56
+                    amount = amount.replace(/,/g, '');
                 }
 
                 try {
