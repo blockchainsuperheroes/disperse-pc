@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disperse PC - Pentagon Chain</title>
+    <title>Disperse - Pentagon Chain & Ethereum</title>
     <link rel="icon" href="https://pentagon.games/assets/images/brand-kit/pentagon-chain-token/png/pentagon-chain-token-fcp.png" type="image/png">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -14,29 +14,11 @@
             color: #fff;
             padding: 2rem;
         }
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .logo-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        .logo {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 0.5rem;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 0.5rem;
-            color: #00d4aa;
-        }
-        .subtitle {
-            text-align: center;
-            color: #888;
-            margin-bottom: 2rem;
-        }
+        .container { max-width: 700px; margin: 0 auto; }
+        .logo-header { text-align: center; margin-bottom: 1.5rem; }
+        .logo { width: 80px; height: 80px; margin-bottom: 0.5rem; }
+        h1 { text-align: center; margin-bottom: 0.5rem; color: #00d4aa; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 2rem; }
         .card {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
@@ -45,163 +27,100 @@
             margin-bottom: 1rem;
         }
         .wallet-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1rem;
         }
-        .wallet-info {
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-        .wallet-address {
-            font-family: monospace;
-            color: #00d4aa;
-        }
-        .balance {
-            color: #fff;
-            font-weight: bold;
-        }
+        .wallet-info { font-size: 0.9rem; color: #aaa; }
+        .wallet-address { font-family: monospace; color: #00d4aa; }
+        .balance { color: #fff; font-weight: bold; }
         button {
-            background: #00d4aa;
-            color: #000;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
+            background: #00d4aa; color: #000; border: none;
+            padding: 0.75rem 1.5rem; border-radius: 8px;
+            font-size: 1rem; font-weight: 600; cursor: pointer;
             transition: all 0.2s;
         }
         button:hover { background: #00f5c4; }
-        button:disabled {
-            background: #444;
-            color: #888;
-            cursor: not-allowed;
-        }
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-        textarea {
+        button:disabled { background: #444; color: #888; cursor: not-allowed; }
+        label { display: block; margin-bottom: 0.5rem; color: #aaa; font-size: 0.9rem; }
+        select, textarea {
             width: 100%;
-            height: 200px;
             background: rgba(0,0,0,0.3);
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 8px;
-            padding: 1rem;
+            padding: 0.75rem 1rem;
             color: #fff;
-            font-family: monospace;
             font-size: 0.9rem;
-            resize: vertical;
         }
-        textarea:focus {
-            outline: none;
-            border-color: #00d4aa;
+        select { cursor: pointer; margin-bottom: 1rem; appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center;
         }
+        select option { background: #1a1a2e; color: #fff; }
+        textarea {
+            height: 200px; font-family: monospace; resize: vertical;
+        }
+        textarea:focus, select:focus { outline: none; border-color: #00d4aa; }
         textarea::placeholder { color: #555; }
+        .row { display: flex; gap: 1rem; margin-bottom: 1rem; }
+        .row > div { flex: 1; }
         .summary {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(0,212,170,0.1);
-            border-radius: 8px;
+            margin-top: 1rem; padding: 1rem;
+            background: rgba(0,212,170,0.1); border-radius: 8px;
         }
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
         .summary-row:last-child { margin-bottom: 0; }
         .summary-label { color: #aaa; }
         .summary-value { font-weight: bold; }
         .error {
-            background: rgba(255,0,0,0.2);
-            border: 1px solid rgba(255,0,0,0.3);
-            color: #ff6b6b;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
+            background: rgba(255,0,0,0.2); border: 1px solid rgba(255,0,0,0.3);
+            color: #ff6b6b; padding: 1rem; border-radius: 8px; margin-top: 1rem;
         }
         .success {
-            background: rgba(0,212,170,0.2);
-            border: 1px solid rgba(0,212,170,0.3);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1rem;
+            background: rgba(0,212,170,0.2); border: 1px solid rgba(0,212,170,0.3);
+            padding: 1rem; border-radius: 8px; margin-top: 1rem;
         }
-        .success a {
-            color: #00d4aa;
-            word-break: break-all;
-        }
-        .actions {
-            margin-top: 1rem;
-            display: flex;
-            gap: 1rem;
-        }
+        .success a { color: #00d4aa; word-break: break-all; }
+        .actions { margin-top: 1rem; display: flex; gap: 1rem; }
         .actions button { flex: 1; }
-        .format-hint {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 0.5rem;
-        }
-        .status {
-            text-align: center;
-            padding: 1rem;
-            color: #aaa;
-        }
+        .format-hint { font-size: 0.8rem; color: #666; margin-top: 0.5rem; }
+        .status { text-align: center; padding: 1rem; color: #aaa; }
         .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #00d4aa;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 0.5rem;
-            vertical-align: middle;
+            display: inline-block; width: 20px; height: 20px;
+            border: 2px solid #00d4aa; border-top-color: transparent;
+            border-radius: 50%; animation: spin 1s linear infinite;
+            margin-right: 0.5rem; vertical-align: middle;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .footer {
-            text-align: center;
-            margin-top: 2rem;
-            color: #555;
-            font-size: 0.8rem;
-        }
+        .footer { text-align: center; margin-top: 2rem; color: #555; font-size: 0.8rem; }
         .footer a { color: #00d4aa; text-decoration: none; }
         .footer a:hover { text-decoration: underline; }
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 0.75rem;
-        }
-        .social-links a {
-            color: #888;
-            transition: color 0.2s;
-        }
+        .social-links { display: flex; justify-content: center; gap: 1rem; margin-bottom: 0.75rem; }
+        .social-links a { color: #888; transition: color 0.2s; }
         .social-links a:hover { color: #00d4aa; }
-        .social-links svg {
-            width: 24px;
-            height: 24px;
-            fill: currentColor;
-        }
-        .contract-info {
-            margin-top: 0.5rem;
-            font-size: 0.75rem;
-            color: #444;
-        }
+        .social-links svg { width: 24px; height: 24px; fill: currentColor; }
+        .contract-info { margin-top: 0.5rem; font-size: 0.75rem; color: #444; }
         .contract-info a { color: #555; }
+        .chain-badge {
+            display: inline-block; padding: 0.25rem 0.75rem;
+            border-radius: 20px; font-size: 0.8rem; font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .chain-badge.pc { background: rgba(0,212,170,0.2); color: #00d4aa; }
+        .chain-badge.eth { background: rgba(98,126,234,0.2); color: #627eea; }
+        .token-balance { font-size: 0.8rem; color: #666; margin-top: 0.25rem; }
+        .approval-note {
+            font-size: 0.8rem; color: #f0ad4e; margin-top: 0.5rem;
+            padding: 0.5rem; background: rgba(240,173,78,0.1);
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="logo-header">
             <img src="https://pentagon.games/assets/images/brand-kit/pentagon-chain-token/png/pentagon-chain-token-fcp.png" alt="Pentagon Chain" class="logo">
-            <h1>Disperse PC</h1>
-            <p class="subtitle">Batch send PC tokens on Pentagon Chain</p>
+            <h1>Disperse</h1>
+            <p class="subtitle">Batch send tokens on Pentagon Chain & Ethereum</p>
         </div>
 
         <div class="card wallet-section">
@@ -213,6 +132,23 @@
         </div>
 
         <div class="card">
+            <div class="row">
+                <div>
+                    <label>Chain</label>
+                    <select id="chain-select" onchange="onChainChange()">
+                        <option value="pc">Pentagon Chain (3344)</option>
+                        <option value="eth">Ethereum (1)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Token</label>
+                    <select id="token-select" onchange="onTokenChange()">
+                    </select>
+                </div>
+            </div>
+
+            <div id="token-balance-row" class="token-balance" style="display:none;"></div>
+
             <label>Recipients and Amounts</label>
             <textarea id="input" placeholder="0x1234...abcd 10.5
 0x5678...efgh 25
@@ -221,6 +157,10 @@
 One address per line, whitespace separated"></textarea>
             <div class="format-hint">Format: address[space or tab]amount — one per line</div>
 
+            <div id="approval-note" class="approval-note" style="display:none;">
+                ⚠️ ERC-20 tokens require an approval transaction before dispersing. You'll be prompted to approve first.
+            </div>
+
             <div id="summary" class="summary" style="display:none;">
                 <div class="summary-row">
                     <span class="summary-label">Recipients</span>
@@ -228,7 +168,7 @@ One address per line, whitespace separated"></textarea>
                 </div>
                 <div class="summary-row">
                     <span class="summary-label">Total Amount</span>
-                    <span class="summary-value" id="total-amount">0 PC</span>
+                    <span class="summary-value" id="total-amount">0</span>
                 </div>
             </div>
 
@@ -252,230 +192,322 @@ One address per line, whitespace separated"></textarea>
                 <a href="https://t.me/pentagongames" target="_blank" title="Telegram">
                     <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
                 </a>
-                <a href="https://github.com/blockchainsuperheroes/disperse-pc" target="_blank" title="GitHub">
-                    <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-                </a>
             </div>
             <a href="https://pentagon.games" target="_blank">pentagon.games</a>
-            <div class="contract-info">
-                Contract: <a href="https://explorer.pentagon.games/address/0x210a72A04fAF219e3c0EEf34c1A8f85E87633de5" target="_blank">0x210a...3de5</a>
-            </div>
-            <div class="verify-note" style="margin-top: 0.5rem; font-size: 0.75rem; color: #666;">
-                🔍 <a href="https://github.com/blockchainsuperheroes/disperse-pc" target="_blank" style="color: #888;">Verify source</a> — Run your own version or compare to ensure this matches the public repo
+            <div class="contract-info" id="contract-info">
+                PC Contract: <a href="https://explorer.pentagon.games/address/0x210a72A04fAF219e3c0EEf34c1A8f85E87633de5" target="_blank">0x210a...3de5</a> |
+                ETH Contract: <a href="https://etherscan.io/address/0x805A82648CfF5b9401C92eE78540dBAa807F98Cf" target="_blank">0x805A...98Cf</a>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <script>
-        const DISPERSE_ADDRESS = "0x210a72A04fAF219e3c0EEf34c1A8f85E87633de5";
-        const CHAIN_ID = 3344;
-        const RPC_URL = "https://rpc.pentagon.games";
-        const DISPERSE_ABI = [
-            "function dispersePCExactDecimal(address[] recipients, uint256[] values) payable"
+        // --- Chain & Token Config ---
+        const CHAINS = {
+            pc: {
+                name: "Pentagon Chain",
+                chainId: 3344,
+                rpc: "https://rpc.pentagon.games",
+                explorer: "https://explorer.pentagon.games",
+                nativeCurrency: { name: "PC", symbol: "PC", decimals: 18 },
+                disperseAddress: "0x210a72A04fAF219e3c0EEf34c1A8f85E87633de5",
+                tokens: [
+                    { symbol: "PC", name: "PC (Native)", address: null, decimals: 18 },
+                    { symbol: "WPC", name: "Wrapped PC", address: "0xAA3d9411DD08FDA149d4545089e241E62EE87860", decimals: 18 },
+                    { symbol: "PEN", name: "PEN Token", address: "0x02fa6e744C68B02F694fD29ECA7B4929718a8721", decimals: 18 },
+                ]
+            },
+            eth: {
+                name: "Ethereum",
+                chainId: 1,
+                rpc: "https://ethereum-rpc.publicnode.com",
+                explorer: "https://etherscan.io",
+                nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+                disperseAddress: "0x805A82648CfF5b9401C92eE78540dBAa807F98Cf",
+                tokens: [
+                    { symbol: "ETH", name: "ETH (Native)", address: null, decimals: 18 },
+                    { symbol: "PC", name: "PC on ETH", address: "0xA1Aa371E450C5AeE7fff259cbF5ccA9384227272", decimals: 18 },
+                    { symbol: "PEN", name: "PEN on ETH", address: "0x5ee3188a3f8adee1d736edd4ae85000105c88f66", decimals: 18 },
+                ]
+            }
+        };
+
+        // --- ABI ---
+        const PC_DISPERSE_ABI = [
+            "function dispersePCExactDecimal(address[] recipients, uint256[] values) payable",
+            "function disperseTokenExactDecimal(address token, address[] recipients, uint256[] values)",
+            "function disperseWPCExactDecimal(address[] recipients, uint256[] values)",
+        ];
+        const ETH_DISPERSE_ABI = [
+            "function disperseEther(address[] recipients, uint256[] values) payable",
+            "function disperseToken(address token, address[] recipients, uint256[] values)",
+            "function disperseTokenSimple(address token, address[] recipients, uint256[] values)",
+        ];
+        const ERC20_ABI = [
+            "function approve(address spender, uint256 amount) returns (bool)",
+            "function allowance(address owner, address spender) view returns (uint256)",
+            "function balanceOf(address owner) view returns (uint256)",
+            "function decimals() view returns (uint8)",
+            "function symbol() view returns (string)",
         ];
 
         let provider, signer, userAddress;
+        let currentChain = "pc";
+        let currentToken = null;
+
+        function getChain() { return CHAINS[currentChain]; }
+
+        function populateTokens() {
+            const sel = document.getElementById("token-select");
+            sel.innerHTML = "";
+            const chain = getChain();
+            chain.tokens.forEach((t, i) => {
+                const opt = document.createElement("option");
+                opt.value = i;
+                opt.textContent = t.symbol + (t.address ? "" : " (native)");
+                sel.appendChild(opt);
+            });
+            currentToken = chain.tokens[0];
+            onTokenChange();
+        }
+
+        function onChainChange() {
+            currentChain = document.getElementById("chain-select").value;
+            populateTokens();
+            if (userAddress) switchChain();
+        }
+
+        function onTokenChange() {
+            const chain = getChain();
+            const idx = parseInt(document.getElementById("token-select").value);
+            currentToken = chain.tokens[idx];
+            const approvalNote = document.getElementById("approval-note");
+            approvalNote.style.display = currentToken.address ? "block" : "none";
+            updateTokenBalance();
+        }
+
+        async function updateTokenBalance() {
+            const el = document.getElementById("token-balance-row");
+            if (!provider || !userAddress) { el.style.display = "none"; return; }
+            try {
+                if (!currentToken.address) {
+                    const bal = await provider.getBalance(userAddress);
+                    const sym = getChain().nativeCurrency.symbol;
+                    el.textContent = `Balance: ${parseFloat(ethers.utils.formatEther(bal)).toFixed(6)} ${sym}`;
+                    el.style.display = "block";
+                    document.getElementById("wallet-balance").innerHTML =
+                        `Balance: <span class="balance">${parseFloat(ethers.utils.formatEther(bal)).toFixed(4)} ${sym}</span>`;
+                } else {
+                    const token = new ethers.Contract(currentToken.address, ERC20_ABI, provider);
+                    const bal = await token.balanceOf(userAddress);
+                    const dec = currentToken.decimals || 18;
+                    el.textContent = `${currentToken.symbol} Balance: ${parseFloat(ethers.utils.formatUnits(bal, dec)).toFixed(6)}`;
+                    el.style.display = "block";
+                }
+            } catch (e) {
+                el.style.display = "none";
+            }
+        }
+
+        async function switchChain() {
+            const chain = getChain();
+            const hexId = "0x" + chain.chainId.toString(16);
+            try {
+                await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: hexId }] });
+            } catch (e) {
+                if (e.code === 4902) {
+                    await window.ethereum.request({
+                        method: "wallet_addEthereumChain",
+                        params: [{
+                            chainId: hexId,
+                            chainName: chain.name,
+                            nativeCurrency: chain.nativeCurrency,
+                            rpcUrls: [chain.rpc],
+                            blockExplorerUrls: [chain.explorer],
+                        }]
+                    });
+                }
+            }
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            signer = provider.getSigner();
+            updateTokenBalance();
+        }
 
         async function connectWallet() {
-            if (!window.ethereum) {
-                alert("Please install MetaMask or another Web3 wallet");
-                return;
-            }
-
+            if (!window.ethereum) { alert("Please install MetaMask or another Web3 wallet"); return; }
             try {
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
                 userAddress = accounts[0];
-
-                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                if (parseInt(chainId, 16) !== CHAIN_ID) {
-                    try {
-                        await window.ethereum.request({
-                            method: 'wallet_switchEthereumChain',
-                            params: [{ chainId: '0x' + CHAIN_ID.toString(16) }]
-                        });
-                    } catch (switchError) {
-                        if (switchError.code === 4902) {
-                            await window.ethereum.request({
-                                method: 'wallet_addEthereumChain',
-                                params: [{
-                                    chainId: '0x' + CHAIN_ID.toString(16),
-                                    chainName: 'Pentagon Chain',
-                                    nativeCurrency: { name: 'PC', symbol: 'PC', decimals: 18 },
-                                    rpcUrls: [RPC_URL],
-                                    blockExplorerUrls: ['https://explorer.pentagon.games']
-                                }]
-                            });
-                        } else {
-                            throw switchError;
-                        }
-                    }
-                }
-
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                signer = provider.getSigner();
-
-                document.getElementById('wallet-status').innerHTML = 
+                await switchChain();
+                document.getElementById("wallet-status").innerHTML =
                     `Connected: <span class="wallet-address">${userAddress.slice(0,6)}...${userAddress.slice(-4)}</span>`;
-                document.getElementById('connect-btn').textContent = 'Connected';
-                document.getElementById('connect-btn').disabled = true;
-                document.getElementById('disperse-btn').disabled = false;
-
-                updateBalance();
-
-                window.ethereum.on('accountsChanged', () => location.reload());
-                window.ethereum.on('chainChanged', () => location.reload());
-
+                document.getElementById("connect-btn").textContent = "Connected";
+                document.getElementById("connect-btn").disabled = true;
+                document.getElementById("disperse-btn").disabled = false;
+                window.ethereum.on("accountsChanged", () => location.reload());
+                window.ethereum.on("chainChanged", () => location.reload());
             } catch (err) {
-                console.error(err);
                 alert("Failed to connect: " + err.message);
             }
         }
 
-        async function updateBalance() {
-            if (!provider || !userAddress) return;
-            const balance = await provider.getBalance(userAddress);
-            const formatted = parseFloat(ethers.utils.formatEther(balance)).toFixed(4);
-            document.getElementById('wallet-balance').innerHTML = 
-                `Balance: <span class="balance">${formatted} PC</span>`;
-        }
-
         function parseInput() {
-            const input = document.getElementById('input').value.trim();
+            const input = document.getElementById("input").value.trim();
             if (!input) return { recipients: [], values: [], total: ethers.BigNumber.from(0) };
-
-            const lines = input.split('\n').filter(l => l.trim());
-            const recipients = [];
-            const values = [];
+            const lines = input.split("\n").filter(l => l.trim());
+            const recipients = [], values = [], errors = [];
             let total = ethers.BigNumber.from(0);
-            const errors = [];
+            const dec = currentToken ? (currentToken.decimals || 18) : 18;
 
             for (let i = 0; i < lines.length; i++) {
-                const line = lines[i].trim();
-                const parts = line.split(/\s+/);
-                
-                if (parts.length < 2) {
-                    errors.push(`Line ${i+1}: Invalid format`);
-                    continue;
-                }
-
+                const parts = lines[i].trim().split(/[\s,]+/);
+                if (parts.length < 2) { errors.push(`Line ${i+1}: Invalid format`); continue; }
                 const address = parts[0];
-                let amount = parts[1];
-
-                if (!ethers.utils.isAddress(address)) {
-                    errors.push(`Line ${i+1}: Invalid address`);
-                    continue;
-                }
-
-                // Smart decimal detection: EU (1.234,56) vs US (1,234.56)
-                // Rule: last separator is the decimal point
-                const lastComma = amount.lastIndexOf(',');
-                const lastDot = amount.lastIndexOf('.');
-                if (lastComma > lastDot) {
-                    // EU format: 1.234,56 -> 1234.56
-                    amount = amount.replace(/\./g, '').replace(',', '.');
-                } else if (lastDot > lastComma) {
-                    // US format: 1,234.56 -> 1234.56
-                    amount = amount.replace(/,/g, '');
-                }
-
+                let amount = parts[parts.length - 1];
+                if (!ethers.utils.isAddress(address)) { errors.push(`Line ${i+1}: Invalid address`); continue; }
+                // EU/US decimal handling
+                const lastComma = amount.lastIndexOf(","), lastDot = amount.lastIndexOf(".");
+                if (lastComma > lastDot) amount = amount.replace(/\./g, "").replace(",", ".");
+                else if (lastDot > lastComma) amount = amount.replace(/,/g, "");
                 try {
-                    const value = ethers.utils.parseEther(amount);
+                    const value = ethers.utils.parseUnits(amount, dec);
                     recipients.push(address);
                     values.push(value);
                     total = total.add(value);
-                } catch (e) {
-                    errors.push(`Line ${i+1}: Invalid amount "${amount}"`);
-                }
+                } catch (e) { errors.push(`Line ${i+1}: Invalid amount "${amount}"`); }
             }
-
             return { recipients, values, total, errors };
         }
 
-        document.getElementById('input').addEventListener('input', () => {
-            const { recipients, values, total, errors } = parseInput();
-            
-            const summaryEl = document.getElementById('summary');
-            const errorEl = document.getElementById('error');
-            
+        document.getElementById("input").addEventListener("input", () => {
+            const { recipients, total, errors } = parseInput();
+            const summaryEl = document.getElementById("summary");
+            const errorEl = document.getElementById("error");
+            const sym = currentToken ? currentToken.symbol : "?";
+            const dec = currentToken ? (currentToken.decimals || 18) : 18;
             if (recipients.length > 0) {
-                summaryEl.style.display = 'block';
-                document.getElementById('recipient-count').textContent = recipients.length;
-                document.getElementById('total-amount').textContent = 
-                    parseFloat(ethers.utils.formatEther(total)).toFixed(6) + ' PC';
-            } else {
-                summaryEl.style.display = 'none';
-            }
-
+                summaryEl.style.display = "block";
+                document.getElementById("recipient-count").textContent = recipients.length;
+                document.getElementById("total-amount").textContent =
+                    parseFloat(ethers.utils.formatUnits(total, dec)).toFixed(6) + " " + sym;
+            } else { summaryEl.style.display = "none"; }
             if (errors && errors.length > 0) {
-                errorEl.style.display = 'block';
-                errorEl.innerHTML = errors.join('<br>');
-            } else {
-                errorEl.style.display = 'none';
-            }
+                errorEl.style.display = "block"; errorEl.innerHTML = errors.join("<br>");
+            } else { errorEl.style.display = "none"; }
         });
 
         async function disperse() {
-            if (!signer) {
-                alert("Please connect wallet first");
-                return;
-            }
-
+            if (!signer) { alert("Please connect wallet first"); return; }
             const { recipients, values, total, errors } = parseInput();
+            if (errors && errors.length > 0) { alert("Please fix errors before dispersing"); return; }
+            if (recipients.length === 0) { alert("No valid recipients"); return; }
 
-            if (errors && errors.length > 0) {
-                alert("Please fix errors before dispersing");
-                return;
-            }
-
-            if (recipients.length === 0) {
-                alert("No valid recipients");
-                return;
-            }
-
-            const statusEl = document.getElementById('status');
-            const successEl = document.getElementById('success');
-            const errorEl = document.getElementById('error');
-            const disperseBtn = document.getElementById('disperse-btn');
+            const statusEl = document.getElementById("status");
+            const successEl = document.getElementById("success");
+            const errorEl = document.getElementById("error");
+            const disperseBtn = document.getElementById("disperse-btn");
+            const chain = getChain();
 
             try {
                 disperseBtn.disabled = true;
-                statusEl.style.display = 'block';
-                successEl.style.display = 'none';
-                errorEl.style.display = 'none';
+                statusEl.style.display = "block";
+                successEl.style.display = "none";
+                errorEl.style.display = "none";
 
-                statusEl.innerHTML = '<span class="spinner"></span> Preparing transaction...';
+                let tx;
 
-                const contract = new ethers.Contract(DISPERSE_ADDRESS, DISPERSE_ABI, signer);
+                if (!currentToken.address) {
+                    // Native token (PC or ETH)
+                    statusEl.innerHTML = '<span class="spinner"></span> Waiting for wallet confirmation...';
+                    if (currentChain === "pc") {
+                        const contract = new ethers.Contract(chain.disperseAddress, PC_DISPERSE_ABI, signer);
+                        tx = await contract.dispersePCExactDecimal(recipients, values, { value: total });
+                    } else {
+                        const contract = new ethers.Contract(chain.disperseAddress, ETH_DISPERSE_ABI, signer);
+                        tx = await contract.disperseEther(recipients, values, { value: total });
+                    }
+                } else {
+                    // ERC-20 token
+                    const tokenContract = new ethers.Contract(currentToken.address, ERC20_ABI, signer);
 
-                statusEl.innerHTML = '<span class="spinner"></span> Waiting for wallet confirmation...';
+                    // Check allowance
+                    statusEl.innerHTML = '<span class="spinner"></span> Checking token allowance...';
+                    const allowance = await tokenContract.allowance(userAddress, chain.disperseAddress);
 
-                const tx = await contract.dispersePCExactDecimal(recipients, values, { value: total });
+                    if (allowance.lt(total)) {
+                        statusEl.innerHTML = '<span class="spinner"></span> Approving token spend...';
+                        const approveTx = await tokenContract.approve(chain.disperseAddress, total);
+                        statusEl.innerHTML = '<span class="spinner"></span> Waiting for approval confirmation...';
+                        await approveTx.wait();
+                    }
+
+                    statusEl.innerHTML = '<span class="spinner"></span> Waiting for wallet confirmation...';
+                    if (currentChain === "pc") {
+                        // PC chain: use disperseTokenExactDecimal (uses transfer, tokens must be in contract)
+                        // Actually the PC contract uses token.transfer, meaning contract must hold tokens.
+                        // We need to send tokens to contract first, or use transferFrom pattern.
+                        // The PC contract disperseTokenExactDecimal uses transfer (not transferFrom).
+                        // So user needs to transfer tokens to contract, then call disperse.
+                        // BUT: we approved the disperse contract. Let's use the ETH contract pattern on PC instead.
+                        // Actually looking at the PC contract source: disperseTokenExactDecimal uses token.transfer
+                        // which means the CONTRACT calls transfer, so contract must hold the tokens.
+                        // This won't work with approve pattern. User must send tokens to contract first.
+                        //
+                        // Workaround: use direct transferFrom calls from user
+                        // We'll just do individual transferFrom calls via the token contract directly.
+                        // This is less gas efficient but works without needing contract changes.
+                        //
+                        // Actually let me re-read: the PC contract has disperseTokenExactDecimal that does
+                        // token.transfer(recipients[i], values[i]) — this means contract must own the tokens.
+                        // Not ideal. Let's just call transferFrom directly for each recipient.
+                        statusEl.innerHTML = '<span class="spinner"></span> Sending tokens (multi-tx)...';
+                        for (let i = 0; i < recipients.length; i++) {
+                            statusEl.innerHTML = `<span class="spinner"></span> Sending ${i+1}/${recipients.length}...`;
+                            const sendTx = await tokenContract.transfer(recipients[i], values[i]);
+                            await sendTx.wait();
+                        }
+                        statusEl.style.display = "none";
+                        successEl.style.display = "block";
+                        successEl.innerHTML = `✅ Dispersed ${currentToken.symbol} to ${recipients.length} recipients on Pentagon Chain!`;
+                        document.getElementById("input").value = "";
+                        document.getElementById("summary").style.display = "none";
+                        updateTokenBalance();
+                        return;
+                    } else {
+                        // ETH chain: disperseTokenSimple uses transferFrom (user approved contract)
+                        const contract = new ethers.Contract(chain.disperseAddress, ETH_DISPERSE_ABI, signer);
+                        tx = await contract.disperseTokenSimple(currentToken.address, recipients, values);
+                    }
+                }
 
                 statusEl.innerHTML = '<span class="spinner"></span> Transaction submitted, waiting for confirmation...';
-
                 const receipt = await tx.wait();
 
-                statusEl.style.display = 'none';
-                successEl.style.display = 'block';
+                statusEl.style.display = "none";
+                successEl.style.display = "block";
+                const sym = currentToken ? currentToken.symbol : "?";
+                const dec = currentToken ? (currentToken.decimals || 18) : 18;
                 successEl.innerHTML = `
-                    ✅ Dispersed ${ethers.utils.formatEther(total)} PC to ${recipients.length} recipients!<br>
-                    <a href="https://explorer.pentagon.games/tx/${tx.hash}" target="_blank">${tx.hash}</a>
+                    ✅ Dispersed ${parseFloat(ethers.utils.formatUnits(total, dec)).toFixed(6)} ${sym} to ${recipients.length} recipients!<br>
+                    <a href="${chain.explorer}/tx/${tx.hash}" target="_blank">${tx.hash}</a>
                 `;
-
-                document.getElementById('input').value = '';
-                document.getElementById('summary').style.display = 'none';
-                updateBalance();
+                document.getElementById("input").value = "";
+                document.getElementById("summary").style.display = "none";
+                updateTokenBalance();
 
             } catch (err) {
                 console.error(err);
-                statusEl.style.display = 'none';
-                errorEl.style.display = 'block';
-                errorEl.textContent = err.message || "Transaction failed";
+                statusEl.style.display = "none";
+                errorEl.style.display = "block";
+                errorEl.textContent = err.reason || err.message || "Transaction failed";
             } finally {
                 disperseBtn.disabled = false;
             }
         }
+
+        // Init
+        populateTokens();
     </script>
 </body>
 </html>
