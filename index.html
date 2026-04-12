@@ -158,7 +158,7 @@ One address per line, whitespace separated"></textarea>
             <div class="format-hint">Format: address[space or tab]amount — one per line</div>
 
             <div id="approval-note" class="approval-note" style="display:none;">
-                ⚠️ ERC-20 tokens require an approval transaction before dispersing. You'll be prompted to approve first.
+                ⚠️ ERC-20 tokens require 2 transactions: first to send tokens to the contract (PC) or approve (ETH), then to disperse.
             </div>
 
             <div id="summary" class="summary" style="display:none;">
@@ -444,36 +444,15 @@ One address per line, whitespace separated"></textarea>
 
                     statusEl.innerHTML = '<span class="spinner"></span> Waiting for wallet confirmation...';
                     if (currentChain === "pc") {
-                        // PC chain: use disperseTokenExactDecimal (uses transfer, tokens must be in contract)
-                        // Actually the PC contract uses token.transfer, meaning contract must hold tokens.
-                        // We need to send tokens to contract first, or use transferFrom pattern.
-                        // The PC contract disperseTokenExactDecimal uses transfer (not transferFrom).
-                        // So user needs to transfer tokens to contract, then call disperse.
-                        // BUT: we approved the disperse contract. Let's use the ETH contract pattern on PC instead.
-                        // Actually looking at the PC contract source: disperseTokenExactDecimal uses token.transfer
-                        // which means the CONTRACT calls transfer, so contract must hold the tokens.
-                        // This won't work with approve pattern. User must send tokens to contract first.
-                        //
-                        // Workaround: use direct transferFrom calls from user
-                        // We'll just do individual transferFrom calls via the token contract directly.
-                        // This is less gas efficient but works without needing contract changes.
-                        //
-                        // Actually let me re-read: the PC contract has disperseTokenExactDecimal that does
-                        // token.transfer(recipients[i], values[i]) — this means contract must own the tokens.
-                        // Not ideal. Let's just call transferFrom directly for each recipient.
-                        statusEl.innerHTML = '<span class="spinner"></span> Sending tokens (multi-tx)...';
-                        for (let i = 0; i < recipients.length; i++) {
-                            statusEl.innerHTML = `<span class="spinner"></span> Sending ${i+1}/${recipients.length}...`;
-                            const sendTx = await tokenContract.transfer(recipients[i], values[i]);
-                            await sendTx.wait();
-                        }
-                        statusEl.style.display = "none";
-                        successEl.style.display = "block";
-                        successEl.innerHTML = `✅ Dispersed ${currentToken.symbol} to ${recipients.length} recipients on Pentagon Chain!`;
-                        document.getElementById("input").value = "";
-                        document.getElementById("summary").style.display = "none";
-                        updateTokenBalance();
-                        return;
+                        // PC chain: transfer tokens to contract, then call disperseTokenExactDecimal
+                        statusEl.innerHTML = '<span class="spinner"></span> Sending tokens to disperse contract...';
+                        const sendTx = await tokenContract.transfer(chain.disperseAddress, total);
+                        statusEl.innerHTML = '<span class="spinner"></span> Waiting for transfer confirmation...';
+                        await sendTx.wait();
+
+                        statusEl.innerHTML = '<span class="spinner"></span> Dispersing tokens...';
+                        const contract = new ethers.Contract(chain.disperseAddress, PC_DISPERSE_ABI, signer);
+                        tx = await contract.disperseTokenExactDecimal(currentToken.address, recipients, values);
                     } else {
                         // ETH chain: disperseTokenSimple uses transferFrom (user approved contract)
                         const contract = new ethers.Contract(chain.disperseAddress, ETH_DISPERSE_ABI, signer);
